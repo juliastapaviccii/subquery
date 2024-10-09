@@ -1,0 +1,51 @@
+-- 1.
+SELECT f.nome_funcionario
+FROM funcionario f
+JOIN departamento d ON f.sigla_depto = d.sigla_depto
+WHERE d.nome_depto LIKE '%Recursos Humanos%';
+
+-- 2.
+SELECT f.nome_funcionario
+FROM funcionario f
+JOIN projeto p ON f.sigla_depto = p.sigla_depto
+WHERE p.sigla_depto IN ('MKT', 'RH');
+
+-- 3.
+SELECT d.nome_depto AS departamento, SUM(f.salario) AS total_salarios
+FROM departamento d
+JOIN funcionario f ON d.sigla_depto = f.sigla_depto
+GROUP BY d.nome_depto;
+
+-- 4.
+SELECT f.nome_funcionario
+FROM funcionario f
+JOIN projeto p ON f.sigla_depto = p.sigla_depto
+WHERE p.sigla_depto = 'TI' AND f.salario > (
+    SELECT AVG(salario)
+    FROM funcionario
+    WHERE sigla_depto = 'TI'
+);
+
+-- 5.
+SELECT d.nome_depto AS departamento, COUNT(f.codfuncionario) AS quantidade_funcionarios
+FROM departamento d
+LEFT JOIN funcionario f ON d.sigla_depto = f.sigla_depto
+GROUP BY d.nome_depto;
+
+-- 6.
+
+SELECT f.nome_funcionario
+FROM funcionario f
+JOIN projeto p ON f.sigla_depto = p.sigla_depto
+WHERE p.sigla_depto = 'RH' AND f.salario > (
+    SELECT AVG(salario)
+    FROM funcionario
+    WHERE sigla_depto = 'RH'
+);
+
+-- 7.
+SELECT d.nome_depto AS departamento,
+GROUP_CONCAT(f.nome_funcionario SEPARATOR ', ') AS funcionarios
+FROM departamento d
+LEFT JOIN funcionario f ON d.sigla_depto = f.sigla_depto
+GROUP BY d.nome_depto;
